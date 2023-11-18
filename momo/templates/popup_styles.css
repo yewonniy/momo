@@ -1,29 +1,33 @@
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "Roboto";
   text-align: center;
   margin: 0;
   background-color: #ffffff; /* 배경색 지정 */
+}
+
+#total-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 #logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  background-color: #f2f2f2; /* 회색 배경 지정 */
   padding: 20px;
 }
 
 #logo {
   max-width: 37px;
   height: auto;
-  margin-right: 10px;
+  margin-right: 0.8rem;
   border-radius: 30px;
 }
 
 #title {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 1.125rem;
+  font-weight: normal;
   color: #333; /* 제목 색상 지정 */
 }
 
@@ -32,30 +36,43 @@ body {
   height: auto;
   cursor: pointer;
   border-radius: 30px;
-  margin-left: 10px;
+  margin-left: 0.8rem;
+}
+
+#dictionary-container {
+  background-color: #efefef;
+  border-radius: 30px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 #search-container {
-  margin-top: 20px;
-  background-color: #f2f2f2; /* 회색 배경 지정 */
-  padding: 20px;
-  border-radius: 10px; /* 둥근 테두리 추가 */
+  border-radius: 30px; /* 둥근 테두리 추가 */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #fff;
+  width: 14rem;
+  height: 2.75rem;
 }
 
 #search-input {
-  width: 200px;
+  width: 9rem;
   padding: 10px;
   font-size: 16px;
-  border-radius: 30px; /* 둥근 테두리 추가 */
-  border: 1px solid #ccc; /* 테두리 스타일 추가 */
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  text-align: center;
 }
 
 #search-button {
-  max-width: 29px;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  border-radius: 30px; /* 둥근 테두리 추가 */
+  border: 0;
+  background-color: #fff;
+  display: flex-end;
+  margin-right: 0.5rem;
 }
 
 #search-button img {
@@ -63,15 +80,27 @@ body {
   height: auto;
 }
 
-#results-container {
-  margin-top: 20px;
-  background-color: #efefef;
-  padding: 20px;
-  border-radius: 10px; /* 둥근 테두리 추가 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+.results-container {
+  margin: 1.5rem;
+  margin-bottom: -0.5rem;
+  background-color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 30px;
+  width: 100%;
 }
 
-.result-item {
+ul {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  flex-wrap: wrap;
+  overflow: auto;
+  text-align: left;
+}
+
+#results-list {
   list-style-type: disc;
-  margin-left: 20px;
+  display: flex;
+  text-align: left;
+  margin-right: 1rem;
 }

@@ -3,75 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Search 영어사운드매치 for Chrome - 설정</title>
+    <title>Search Settings</title>
     <link rel="stylesheet" href="setting_styles.css" />
   </head>
   <body>
-    <div id="title_background">
-      <h1 id="title">Search 영어사운드매치 for Chrome</h1>
-    </div>
-
-    <div id="trigger-section">
-      <img
-        id="trigger-image"
-        src="../templates/images/trigger_icon.jpg"
-        alt="트리거 모드 이미지"
-      />
-      <div id="trigger-info">
-        <h2>트리거 모드</h2>
+    <div class="settings-container">
+      <div id="title-container">
+        <img
+          id="logo"
+          src="../templates/images/logo.jpg"
+          alt="영어사운드매치 로고"
+        />
+        <h1 class="title">Search <b>영어사운드매치</b> for Chrome</h1>
       </div>
-    </div>
+      <div class="option-group">
+        <div id="trigger-mode">
+          <img
+            id="trigger"
+            src="../templates/images/trigger_icon.png"
+            alt="트리거 모드 이미지"
+          />
+          <h2 class="group-title">트리거 모드</h2>
+        </div>
 
-    <div id="trigger-options">
-      <button class="option-button selected" onclick="setTriggerMode('auto')">
-        자동
-      </button>
-      <button class="option-button" onclick="setTriggerMode('manual')">
-        수동
-      </button>
-    </div>
+        <div class="option">
+          <input type="radio" id="option1_a" name="search_scope" checked />
+          <label for="option1_a"><b>수동</b></label>
+          <p class="note">검색 버튼 클릭 시에만 작동합니다.</p>
+        </div>
+        <div class="option">
+          <input type="radio" id="option1_b" name="search_scope" />
+          <label for="option1_b"><b>자동</b></label>
+          <p class="note">서치엔진에 검색 시 자동으로 작동합니다.</p>
+        </div>
+      </div>
+      <div class="option-group">
+        <div id="setting-mode">
+          <img
+            id="setting"
+            src="../templates/images/setting_setting_icon.png"
+            alt="내부 설정 모드 이미지"
+          />
+          <h2 class="group-title">설정</h2>
+        </div>
 
-    <div id="option-description">
-      <p id="auto-description" class="option-description">
-        서치엔진에 검색 시 자동으로 작동합니다.
-      </p>
-      <p id="manual-description" class="option-description">
-        검색 버튼 클릭 시에만 작동합니다.
-      </p>
+        <div class="option">
+          <input type="radio" id="option2_a" name="search_mode" checked />
+          <label for="option2_a"><b>단어/발음 + 뜻</b></label>
+          <p class="note">단어와 한국어 발음 및 뜻을 모두 보여줍니다.</p>
+          <p class="example">예: Augment (어그먼트) - 논쟁, 주장</p>
+        </div>
+        <div class="option">
+          <input type="radio" id="option2_b" name="search_mode" />
+          <label for="option2_b"><b>단어 + 뜻</b></label>
+          <p class="note">단어와 뜻만 보여줍니다.</p>
+          <p class="example">예: Augment - 논쟁, 주장</p>
+        </div>
+      </div>
+      <button id="save-button">저장</button>
     </div>
-
     <script>
-      // 페이지 로드 시 자동 트리거 모드로 설정
-      document.addEventListener("DOMContentLoaded", function () {
-        setTriggerMode("auto");
-      });
-
-      function setTriggerMode(mode) {
-        // 옵션 버튼 선택 및 해제 처리
-        const buttons = document.querySelectorAll(".option-button");
-        buttons.forEach((button) => button.classList.remove("selected"));
-
-        // 선택된 버튼에 selected 클래스 추가
-        const selectedButton = document.querySelector(
-          `.option-button[data-mode="${mode}"]`
-        );
-        selectedButton.classList.add("selected");
-
-        // 선택한 모드에 따라 설명 문구 업데이트
-        const autoDescription = document.getElementById("auto-description");
-        const manualDescription = document.getElementById("manual-description");
-
-        if (mode === "auto") {
-          autoDescription.style.display = "block";
-          manualDescription.style.display = "none";
-          console.log(
-            "자동 모드 선택: 서치엔진에 검색 시 자동으로 작동합니다."
-          );
-        } else if (mode === "manual") {
-          autoDescription.style.display = "none";
-          manualDescription.style.display = "block";
-          console.log("수동 모드 선택: 검색 버튼 클릭 시에만 작동합니다.");
+      function onClick(e) {
+        if (option1_a.checked === true) {
+          localStorage.setItem("trigger_option", "passive");
+        } else {
+          localStorage.setItem("trigger_option", "active");
         }
+        if (option2_a.checked === true) {
+          localStorage.setItem("setting_option", "yes_pron");
+        } else {
+          localStorage.setItem("setting_option", "no_pron");
+        }
+        window.location.href = "popup.html";
+      }
+
+      const trigger_option = localStorage.getItem("trigger_option");
+      const setting_option = localStorage.getItem("setting_option");
+
+      const save_button = document.getElementById("save-button");
+      save_button.addEventListener("click", onClick);
+
+      const option1_a = document.getElementById("option1_a");
+      const option1_b = document.getElementById("option1_b");
+      const option2_a = document.getElementById("option2_a");
+      const option2_b = document.getElementById("option2_b");
+
+      if (trigger_option === "passive") {
+        option1_a.checked = true;
+      } else {
+        option1_b.checked = true;
+      }
+      if (setting_option === "yes_pron") {
+        option2_a.checked = true;
+      } else {
+        option2_b.checked = true;
       }
     </script>
   </body>
