@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search 영어사운드매치 for Chrome - 설정</title>
+    <link rel="stylesheet" href="setting_styles.css" />
+  </head>
+  <body>
+    <div id="title_background">
+      <h1 id="title">Search 영어사운드매치 for Chrome</h1>
+    </div>
+
+    <div id="trigger-section">
+      <img
+        id="trigger-image"
+        src="../templates/images/trigger_icon.jpg"
+        alt="트리거 모드 이미지"
+      />
+      <div id="trigger-info">
+        <h2>트리거 모드</h2>
+      </div>
+    </div>
+
+    <div id="trigger-options">
+      <button class="option-button selected" onclick="setTriggerMode('auto')">
+        자동
+      </button>
+      <button class="option-button" onclick="setTriggerMode('manual')">
+        수동
+      </button>
+    </div>
+
+    <div id="option-description">
+      <p id="auto-description" class="option-description">
+        서치엔진에 검색 시 자동으로 작동합니다.
+      </p>
+      <p id="manual-description" class="option-description">
+        검색 버튼 클릭 시에만 작동합니다.
+      </p>
+    </div>
+
+    <script>
+      // 페이지 로드 시 자동 트리거 모드로 설정
+      document.addEventListener("DOMContentLoaded", function () {
+        setTriggerMode("auto");
+      });
+
+      function setTriggerMode(mode) {
+        // 옵션 버튼 선택 및 해제 처리
+        const buttons = document.querySelectorAll(".option-button");
+        buttons.forEach((button) => button.classList.remove("selected"));
+
+        // 선택된 버튼에 selected 클래스 추가
+        const selectedButton = document.querySelector(
+          `.option-button[data-mode="${mode}"]`
+        );
+        selectedButton.classList.add("selected");
+
+        // 선택한 모드에 따라 설명 문구 업데이트
+        const autoDescription = document.getElementById("auto-description");
+        const manualDescription = document.getElementById("manual-description");
+
+        if (mode === "auto") {
+          autoDescription.style.display = "block";
+          manualDescription.style.display = "none";
+          console.log(
+            "자동 모드 선택: 서치엔진에 검색 시 자동으로 작동합니다."
+          );
+        } else if (mode === "manual") {
+          autoDescription.style.display = "none";
+          manualDescription.style.display = "block";
+          console.log("수동 모드 선택: 검색 버튼 클릭 시에만 작동합니다.");
+        }
+      }
+    </script>
+  </body>
+</html>

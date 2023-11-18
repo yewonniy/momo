@@ -1,0 +1,77 @@
+body {
+  font-family: "Arial", sans-serif;
+  text-align: center;
+  margin: 0;
+  background-color: #ffffff; /* 배경색 지정 */
+}
+
+#logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background-color: #f2f2f2; /* 회색 배경 지정 */
+  padding: 20px;
+}
+
+#logo {
+  max-width: 37px;
+  height: auto;
+  margin-right: 10px;
+  border-radius: 30px;
+}
+
+#title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333; /* 제목 색상 지정 */
+}
+
+#settings-button {
+  max-width: 30px;
+  height: auto;
+  cursor: pointer;
+  border-radius: 30px;
+  margin-left: 10px;
+}
+
+#search-container {
+  margin-top: 20px;
+  background-color: #f2f2f2; /* 회색 배경 지정 */
+  padding: 20px;
+  border-radius: 10px; /* 둥근 테두리 추가 */
+}
+
+#search-input {
+  width: 200px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 30px; /* 둥근 테두리 추가 */
+  border: 1px solid #ccc; /* 테두리 스타일 추가 */
+}
+
+#search-button {
+  max-width: 29px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px; /* 둥근 테두리 추가 */
+}
+
+#search-button img {
+  width: 20px; /* 이미지 크기 조절 */
+  height: auto;
+}
+
+#results-container {
+  margin-top: 20px;
+  background-color: #efefef;
+  padding: 20px;
+  border-radius: 10px; /* 둥근 테두리 추가 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+.result-item {
+  list-style-type: disc;
+  margin-left: 20px;
+}
