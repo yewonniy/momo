@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,3 +124,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# api 관리
+env = environ.Env(DEBUG=(bool, True)) #환경변수를 불러올 수 있는 상태로 세팅
+
+#환경변수 파일 읽어오기
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, '.env')
+)
+
+API_KEY = env('API_KEY') #SECEREY_KEY 값 불러오기
