@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search 영어사운드매치 for Chrome</title>
     <link rel="stylesheet" href="popup_styles.css" />
-    <script src = "./js/script.js"></script>
+    <script src = "./script.js"></script>
   </head>
   <body>
     <div id="logo-container">
@@ -15,12 +15,8 @@
         alt="영어사운드매치 로고"
       />
       <h1 id="title">Search 영어사운드매치 for Chrome</h1>
-      <img
-        id="settings-button"
-        src="../templates/images/setting_icon.jpg"
-        alt="설정 버튼"
-        onclick="goToSettings()"
-      />
+      <img id="settings-button" src="../templates/images/setting_icon.jpg" alt="설정 버튼" />
+
     </div>
 
     <div id="search-container">
@@ -36,17 +32,6 @@
       </ul>
     </div>
 
-    <script>
-      function goToSettings() {
-        // 설정 버튼을 클릭하면 이동할 링크를 지정
-        window.location.href = "setting.html";
-      }
 
-      function search() {
-        // 검색 버튼을 클릭하면 검색 기능을 수행하는 코드를 작성.
-        // 이 부분은 실제로 백엔드와 연동하여 검색을 수행하는 코드로 대체.
-        console.log("검색 기능 수행");
-      }
-    </script>
   </body>
 </html>
