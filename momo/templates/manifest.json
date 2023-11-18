@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "momo",
+    "version": "1.0",
+    "description": "입력한 한국어 발음과 유사한 영어 단어를 출력해주는 크롬 익스텐션",
+     "action": {
+        "default_title": "...",
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+      "activeTab",
+      "tabs",
+      "scripting"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["*://*.google.com/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
