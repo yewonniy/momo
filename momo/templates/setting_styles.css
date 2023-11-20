@@ -1,0 +1,94 @@
+body {
+  font-family: "Roboto";
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #212529;
+}
+
+#title-container {
+  background-color: #2b2b2b;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  height: 6rem;
+  margin: 10px;
+}
+
+#logo {
+  max-width: 37px;
+  height: auto;
+  margin-right: 0.8rem;
+  border-radius: 30px;
+}
+
+.settings-container {
+  width: 600px;
+  margin: 50px auto;
+  background-color: white;
+  padding: 20px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: normal;
+  color: #ffffff;
+}
+
+#trigger-mode {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+#trigger {
+  width: 2rem;
+  height: 2rem;
+}
+
+#setting-mode {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+#setting {
+  width: 2rem;
+  height: 2rem;
+}
+
+.option-group {
+  border-radius: 5px;
+  background-color: #f1f3f5;
+  margin: 10px;
+  padding: 2rem;
+}
+
+.option {
+  margin-top: 0.5rem;
+  margin-bottom: 5px;
+  font-size: 1.25rem;
+  margin-left: 1rem;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+}
+
+.group-title {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+}
+
+.note {
+  margin-left: 2rem;
+  font-size: 1.125rem;
+}
+
+.example {
+  font-size: 1.125rem;
+  color: #868e96;
+  margin-top: -0.5rem;
+  margin-left: 2rem;
+}
