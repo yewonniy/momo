@@ -1,31 +1,80 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // 새로운 도구 창 생성
-    var toolDiv = document.createElement('div');
-    toolDiv.id = 'myExtensionToolDiv';
-    toolDiv.textContent = '여기에 도구 창의 내용';
-    toolDiv.style.cssText = 'position: fixed; top: 100px; right: 20px; background-color: white; border: 1px solid black; padding: 10px;';
-  
-    // Google 검색 결과 페이지에 도구 창 추가
-    document.body.appendChild(toolDiv);
-  });
+console.log("Content script is running");
 
-document.addEventListener('DOMContentLoaded', function() {
-    var settingsButton = document.getElementById('settings-button');
-    if(settingsButton) {
-        settingsButton.addEventListener('click', goToSettings);
-    }
-
-    var searchButton = document.getElementById('search-button');
-    if(searchButton) {
-        searchButton.addEventListener('click', search);
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action === "updateSearch") {
+        var searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.value = request.query;
+        }
     }
 });
 
-function goToSettings() {
-    window.location.href = "setting.html";
+window.onload = function() {
+    console.log("된다");
+
+    // 페이지에 form 요소가 있는지 확인합니다.
+    var form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            let searchQuery = document.querySelector('input[name="q"]').value;
+            chrome.runtime.sendMessage({ action: "updateSearch", query: searchQuery });
+        });
+    }
+
+    console.log("진짜 된다");
+
+    var targetContainer;
+
+    var intervalID = setInterval(function() {
+        targetContainer = document.querySelector('#rcnt');
+        if (targetContainer) {
+
+            clearInterval(intervalID);
+            targetContainer.style.display = 'flex';
+            targetContainer.style.flexDirection = 'row';
+            console.log("진짜 진짜 된다");
+            var iframe = document.createElement('iframe');
+            iframe.src = chrome.runtime.getURL('home.html');
+            iframe.style.width = '431px';
+            iframe.style.height = '400px';
+            iframe.style.border = 'none';
+            iframe.style.display = 'flex';
+            console.log("진짜 진짜 2된다");
+            targetContainer.appendChild(iframe);
+        }
+    }, 1000); // 1초마다 #rcnt 요소를 찾습니다.
 }
 
-function search() {
-    console.log("검색 기능 수행");
-    // 검색 기능 관련 코드
-}
+
+document.getElementById("search-button-2").addEventListener("click", ()=>{
+    const searchWord = document.getElementById("search-input-2").value;
+    console.log(searchWord);
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const tab = tabs[0];
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            function: (message) => {
+                chrome.runtime.sendMessage(message);
+            },
+            args: [{ type: 'searching', payload: { message: searchWord } }],
+        });
+    });
+})
+
+// script.js
+window.onload = function() {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if (request.type == 'googlesearching') {
+            const inputElement = document.getElementById('search-input-2');
+            const buttonElement = document.getElementById('search-button-2');
+            console.log(request.payload.message);
+            if (inputElement) {
+                inputElement.value = request.payload.message;
+            }
+            if (buttonElement) {
+                buttonElement.click();
+            }
+        }
+    });
+};
+

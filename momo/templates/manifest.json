@@ -4,8 +4,7 @@
   "version": "1.0",
   "description": "...",
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": "logo.jpg" 
+    "default_icon": "logo.jpg"
   },
   "background": {
     "service_worker": "background.js"
@@ -13,7 +12,9 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "scripting"
+    "scripting",
+    "storage", 
+    "webNavigation" 
   ],
   "content_scripts": [
     {
@@ -21,10 +22,12 @@
       "js": ["script.js"]
     }
   ],
-  
+  "host_permissions": [ 
+    "*://*.google.com/*"
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["setting.html", "setting_styles.css", "../templates/images/*"],
+      "resources": ["home.html", "home_styles.css", "setting.html", "setting_styles.css", "home.js", "setting.js", "../templates/images/*"],
       "matches": ["<all_urls>"]
     }
   ]
