@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search 영어사운드매치 for Chrome</title>
+    <link rel="stylesheet" href="popup_styles.css" />
+    <script src = "./js/script.js"></script>
+  </head>
+  <body>
+    <div id="logo-container">
+      <img
+        id="logo"
+        src="../templates/images/logo.jpg"
+        alt="영어사운드매치 로고"
+      />
+      <h1 id="title">Search 영어사운드매치 for Chrome</h1>
+      <img
+        id="settings-button"
+        src="../templates/images/setting_icon.jpg"
+        alt="설정 버튼"
+        onclick="goToSettings()"
+      />
+    </div>
+
+    <div id="search-container">
+      <input type="text" id="search-input" value="어그먼트" />
+      <button id="search-button" onclick="search()">
+        <img src="../templates/images/search_icon.jpg" alt="검색 버튼" />
+      </button>
+    </div>
+
+    <div id="results-container">
+      <ul id="results-list">
+        <!-- 검색 결과는 여기에 동적으로 추가 -->
+      </ul>
+    </div>
+
+    <script>
+      function goToSettings() {
+        // 설정 버튼을 클릭하면 이동할 링크를 지정
+        window.location.href = "setting.html";
+      }
+
+      function search() {
+        // 검색 버튼을 클릭하면 검색 기능을 수행하는 코드를 작성.
+        // 이 부분은 실제로 백엔드와 연동하여 검색을 수행하는 코드로 대체.
+        console.log("검색 기능 수행");
+      }
+    </script>
+  </body>
+</html>
