@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "momo",
+  "version": "1.0",
+  "description": "...",
+  "action": {
+    "default_icon": "logo.jpg"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "scripting",
+    "storage", 
+    "webNavigation" 
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.google.com/*"],
+      "js": ["script.js"]
+    }
+  ],
+  "host_permissions": [ 
+    "*://*.google.com/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["home.html", "home_styles.css", "setting.html", "setting_styles.css", "home.js", "setting.js", "../templates/images/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

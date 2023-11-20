@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search 영어사운드매치 for Chrome</title>
+    <link rel="stylesheet" href="home_styles.css" />
+  </head>
+  <body>
+    <div id="total-container">
+      <div id="logo-container">
+        <img
+          id="logo"
+          src="logo.jpg"
+          alt="영어사운드매치 로고"
+        />
+        <h1 id="title">Search <b>영어사운드매치</b> for Chrome</h1>
+        <img id="settings-button" src="images/setting_icon.jpg" alt="설정 버튼" />
+
+      </div>
+
+      <div id="dictionary-container">
+        <div id="search-container">
+          <div id="search-input">
+            <input type="text" id="search-input" value="울랄라세션들이지롱" />
+          </div>
+          <div id="search-button">
+            <button id="search-button" onclick="search()">
+              <img src="images/search_icon.jpg" alt="검색 버튼" />
+            </button>
+          </div>
+        </div>
+
+        <div class="results-container"></div>
+      </div>
+    </div>
+    <script src="home.js"></script>
+  </body>
+</html>
