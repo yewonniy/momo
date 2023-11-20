@@ -80,7 +80,7 @@ body {
   height: auto;
 }
 
-#results-container {
+.results-container {
   margin: 1.5rem;
   margin-bottom: -0.5rem;
   background-color: #ffffff;
