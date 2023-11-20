@@ -38,8 +38,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({
             message: searchWord,
         });
+        $.ajax({
+            url: 'https://port-0-momo-5mk12alp3wgrdi.sel5.cloudtype.app/',
+            type: 'GET',
+            data: {
+              'input_word': searchWord
+            },
+            success: function(res) {
+              // res는 응답된 JSON 데이터입니다.
+              chrome.runtime.sendMessage({
+                type: 'listmessage',
+                payload: {
+                    message: res,
+                },
+            });
+            },
+            error: function(error) {
+              console.log(error);
+            }
+          });
     } 
     return true; // 비동기로 작업 시 필요
 });
-
 

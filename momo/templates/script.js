@@ -1,5 +1,3 @@
-console.log("Content script is running");
-
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "updateSearch") {
         var searchInput = document.getElementById('search-input');
@@ -9,8 +7,59 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
+async function waitForElement(id) {
+    while (document.getElementById(id) === null) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+    return document.getElementById(id);
+}
+
+async function waitForElementClass(classname) {
+    while (document.getElementsByClassName(classname)[0] === null) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+    return document.getElementsByClassName(classname)[0];
+}
+
+const getWord = new Promise((resolve, reject) => {
+    const inputElement = document.getElementById('APjFqb');
+    var word = inputElement.value;
+    return word;
+});
+
+async function sendMessage(word) {
+    chrome.runtime.sendMessage({
+        type: 'googlesearching',
+        payload: {
+            message: word,
+        },
+    });
+};
+
 window.onload = function() {
-    console.log("된다");
+    getWord.then(word => {
+        const ourInput = waitForElement('search-input-2');
+        const ourButton = waitForElement('search-button-2');
+        
+        if (ourInput) {
+            ourInput.value = word;
+            ourButton.click();
+        }
+    }).then(word => sendMessage(word))
+    // .then(document.getElementById("search-button-2").addEventListener("click", ()=>{
+    //     const searchWord = document.getElementById("search-input-2").value;
+    //     console.log(searchWord);
+    //     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    //         const tab = tabs[0];
+    //         chrome.scripting.executeScript({
+    //             target: { tabId: tab.id },
+    //             function: (message) => {
+    //                 chrome.runtime.sendMessage(message);
+    //             },
+    //             args: [{ type: 'wordsearching', payload: { message: searchWord } }],
+    //         });
+    //     });
+    // }))
 
     // 페이지에 form 요소가 있는지 확인합니다.
     var form = document.querySelector('form');
@@ -21,8 +70,6 @@ window.onload = function() {
         });
     }
 
-    console.log("진짜 된다");
-
     var targetContainer;
 
     var intervalID = setInterval(function() {
@@ -32,49 +79,33 @@ window.onload = function() {
             clearInterval(intervalID);
             targetContainer.style.display = 'flex';
             targetContainer.style.flexDirection = 'row';
-            console.log("진짜 진짜 된다");
             var iframe = document.createElement('iframe');
             iframe.src = chrome.runtime.getURL('home.html');
             iframe.style.width = '431px';
             iframe.style.height = '400px';
             iframe.style.border = 'none';
             iframe.style.display = 'flex';
-            console.log("진짜 진짜 2된다");
             targetContainer.appendChild(iframe);
         }
     }, 1000); // 1초마다 #rcnt 요소를 찾습니다.
 }
 
 
-document.getElementById("search-button-2").addEventListener("click", ()=>{
-    const searchWord = document.getElementById("search-input-2").value;
-    console.log(searchWord);
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const tab = tabs[0];
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            function: (message) => {
-                chrome.runtime.sendMessage(message);
+
+let searchWord;
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type == 'wordsearching') {
+        console.log(request.payload.message);
+        searchWord = request.payload.message;
+
+        // 변수에 값이 할당된 후에 메시지를 보내야 합니다.
+        chrome.runtime.sendMessage({
+            type: 'searching',
+            payload: {
+                message: searchWord,
             },
-            args: [{ type: 'searching', payload: { message: searchWord } }],
         });
-    });
-})
-
-// script.js
-window.onload = function() {
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.type == 'googlesearching') {
-            const inputElement = document.getElementById('search-input-2');
-            const buttonElement = document.getElementById('search-button-2');
-            console.log(request.payload.message);
-            if (inputElement) {
-                inputElement.value = request.payload.message;
-            }
-            if (buttonElement) {
-                buttonElement.click();
-            }
-        }
-    });
-};
-
+    } 
+    sendResponse({});
+    return true;
+});
