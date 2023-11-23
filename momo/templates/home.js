@@ -69,6 +69,18 @@ function goToSettings() {
     });
 }
 
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.type === 'searchWord') {
+      console.log('메세지 옴')
+      const searchInput = document.getElementById('search-input-2');
+      if (searchInput) {
+          searchInput.value = request.data;
+          console.log('변경됨')
+          // 변경된 값을 다시 script.js로 메시지 전송
+          chrome.runtime.sendMessage({ type: 'inputValueChanged', data: request.data });
+      }
+  }
+});
 // document.getElementById("search-button-2").addEventListener("click", ()=>{
 //   console.log('좀');
 //   const searchWord = document.getElementById("search-input-2").value;
@@ -103,3 +115,38 @@ function goToSettings() {
 //   });
 // };
 
+document.addEventListener('DOMContentLoaded', function () {
+  // Retrieve searchWord from local storage
+  chrome.storage.local.get(['searchWord'], function (result) {
+    function waitForElements() {
+      const searchInput = document.getElementById('search-input-2');
+      const searchButton = document.getElementById('search-button-2');
+
+      if (searchInput && searchButton) {
+          // Both elements are found, proceed with the actions
+          searchInput.value = result.searchWord || '';
+
+          // Add click event listener to the button
+          searchButton.addEventListener('click', function () {
+              console.log('button clicked');
+
+              chrome.runtime.sendMessage({
+                  type: 'searchButtonClicked',
+          
+              });
+          });
+
+          // Trigger the click event programmatically
+          searchButton.click();
+      } else {
+          // One or both elements are not found, wait and try again
+          setTimeout(waitForElements, 100); // Adjust the delay time as needed
+      }
+  }
+
+  // Start waiting for elements
+  waitForElements();
+  });
+  
+  // Perform any other actions with searchWord if needed
+});
