@@ -23,7 +23,8 @@
     }
   ],
   "host_permissions": [ 
-    "*://*.google.com/*"
+    "*://*.google.com/*",
+    "https://port-0-momo-5mk12alp3wgrdi.sel5.cloudtype.app/"
   ],
   "web_accessible_resources": [
     {

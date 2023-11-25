@@ -11,7 +11,7 @@ def home(request):
     import os
     openai.api_key = API_KEY
     model = "gpt-3.5-turbo"
-    user_input = "익샙션"
+    user_input = request.GET.get('input_word', '')
 
     try:
         word = Word.objects.get(input_word=user_input)
