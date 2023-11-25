@@ -29,6 +29,21 @@ const showingLists = (words, type) => {
   container.appendChild(ul);
 };
 
+document.addEventListener('DOMContentLoaded', function () {
+  // background.js에서 로컬 스토리지에서 검색 결과를 가져오는 코드를 추가
+  chrome.storage.local.get(['searchResult'], function (result) {
+      const searchResult = result.searchResult;
+
+      // 검색 결과가 있는지 확인
+      if (searchResult) {
+          // 검색 결과를 사용하여 페이지를 수정하는 코드
+          showingLists(searchResult, setting_option);
+      } else {
+          console.log('No search result found.');
+      }
+  });
+});
+
 const getMessage = (setting_option) => {
   window.onload = function() {
     chrome.runtime.onMessage.addListener((request) => {
@@ -81,39 +96,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
   }
 });
-// document.getElementById("search-button-2").addEventListener("click", ()=>{
-//   console.log('좀');
-//   const searchWord = document.getElementById("search-input-2").value;
-//   console.log(searchWord);
-//   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-//       const tab = tabs[0];
-//       chrome.scripting.executeScript({
-//           target: { tabId: tab.id },
-//           function: (message) => {
-//               chrome.runtime.sendMessage(message);
-//           },
-//           args: [{ type: 'wordsearching', payload: { message: searchWord } }],
-//       });
-//   });
-// })
-
-
-// // script.js
-// window.onload = function() {
-//   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//       if (request.type == 'googlesearching') {
-//           const inputElement = document.getElementById('search-input-2');
-//           const buttonElement = document.getElementById('search-button-2');
-//           console.log(request.payload.message);
-//           if (inputElement) {
-//               inputElement.value = request.payload.message;
-//           }
-//           if (buttonElement) {
-//               buttonElement.click();
-//           }
-//       }
-//   });
-// };
 
 document.addEventListener('DOMContentLoaded', function () {
   // Retrieve searchWord from local storage
@@ -126,18 +108,18 @@ document.addEventListener('DOMContentLoaded', function () {
           // Both elements are found, proceed with the actions
           searchInput.value = result.searchWord || '';
 
-          // Add click event listener to the button
-          searchButton.addEventListener('click', function () {
-              console.log('button clicked');
-
-              chrome.runtime.sendMessage({
-                  type: 'searchButtonClicked',
+          // Add click event listener to the button, setting option에 따라 if문 작성
+          if (trigger_option === "passive") {
+            searchButton.addEventListener('click', function () {
+                console.log('button clicked');
+                chrome.storage.local.set({ 'searchWordback': result.searchWord });
+                chrome.runtime.sendMessage({
+                    type: 'searchButtonClicked',
+                });
+            });
+            searchButton.click();
+          }
           
-              });
-          });
-
-          // Trigger the click event programmatically
-          searchButton.click();
       } else {
           // One or both elements are not found, wait and try again
           setTimeout(waitForElements, 100); // Adjust the delay time as needed
