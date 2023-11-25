@@ -14,7 +14,8 @@ const showingLists = (words, type) => {
 
     key = key_list[idx];
     pronounciation = res[key][0];
-    definition = res[key][1];
+    definitionIndex = res[key].indexOf(':');
+    definition = res[key].substring(definitionIndex + 1).trim();
 
     if (type === "no_pron") {
       li_text = key + " " + `(${pronounciation})` + " : " + definition;
