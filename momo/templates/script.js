@@ -5,7 +5,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             searchInput.value = request.query;
         }
     }
-});
+});window.onload = function() {
+    var targetContainer = document.querySelector('#rcnt');
+    if (!targetContainer) return;
 
 
 async function waitForElement(id) {
@@ -68,6 +70,7 @@ function checkForGoogleSearch() {
         setTimeout(checkForGoogleSearch, 100);
     }
 }
+
 
 // 페이지가 로드된 후 Google 검색창 확인
 window.addEventListener('load', checkForGoogleSearch);
