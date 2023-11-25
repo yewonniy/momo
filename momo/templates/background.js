@@ -83,12 +83,14 @@ let searchWordback ;
 //         // To indicate that you want to send a response asynchronously, you can return true
 //     }
 // });
-function sendRequestAndSaveToStorage(searchWord) {
+function sendRequestAndSaveToStorage(inputWord) {
+    console.log(inputWord);
     // 외부 URL로 데이터를 보냅니다.
-    fetch('https://port-0-momo-5mk12alp3wgrdi.sel5.cloudtype.app/?searchWord=' + searchWord)
+    fetch('https://port-0-momo-5mk12alp3wgrdi.sel5.cloudtype.app/?input_word=' + inputWord)
         .then(response => response.json())
         .then(data => {
             // 받은 결과를 Chrome 로컬 스토리지에 저장합니다.
+            console.log(data);
             chrome.storage.local.set({ 'searchResult': data }, function () {
                 console.log('Data saved to local storage:', data);
             });
@@ -100,7 +102,7 @@ function sendRequestAndSaveToStorage(searchWord) {
 
 document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.local.get(['searchWordback'], function (result) {
-        searchWordback = result.searchWordback;
+        var searchWordback = result.searchWordback;
         console.log(searchWordback);
         sendRequestAndSaveToStorage(searchWordback);
     });
