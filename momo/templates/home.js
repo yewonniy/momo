@@ -83,21 +83,20 @@ if (trigger_option === "passive") {
 }
 
 function goToSettings() {
-    chrome.runtime.sendMessage({action: "getTabUrl"}, function(response) {
-        if (chrome.runtime.lastError) {
-            console.error("Runtime Error: ", chrome.runtime.lastError);
-            return;
-        }
+  chrome.runtime.sendMessage({action: "getTabUrl"}, function(response) {
+      if (chrome.runtime.lastError) {
+          console.error("Runtime Error: ", chrome.runtime.lastError);
+          return;
+      }
 
-        if (response && response.url) {
-            var settingsUrl = chrome.runtime.getURL('setting.html') + '?returnUrl=' + encodeURIComponent(response.url);
-            window.open(settingsUrl, '_blank');
-        } else {
-            console.error("Error getting the tab URL or no URL present");
-        }
-    });
+      if (response && response.url) {
+          var settingsUrl = chrome.runtime.getURL('setting.html') + '?returnUrl=' + encodeURIComponent(response.url);
+          window.open(settingsUrl, '_blank');
+      } else {
+          console.error("Error getting the tab URL or no URL present");
+      }
+  });
 }
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type === 'searchWord') {
       console.log('메세지 옴')
