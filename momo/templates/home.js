@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Set searchWordback in local storage to result.searchWord
         searchButton.addEventListener('click', function () {
             console.log('button clicked');
-            searchWordback = searchInput.value;
+            searchWordback = document.getElementById('search-input-2').value;
             console.log(searchWordback);
             chrome.storage.local.set({ 'searchWordback': searchWordback || '' }, function () {
               console.log('searchWordback updated');

@@ -103,21 +103,19 @@ function sendRequestAndSaveToStorage(inputWord) {
         });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
     // Retrieve searchWordback from local storage
-    function checkAndProcessSearchWordback() {
-        chrome.storage.local.get(['searchWordback'], function (result) {
-    
-        searchWordback = result.searchWordback;
-        // Check if searchWordback is not empty before sending the request
-        if (searchWordback !== '') {
-            sendRequestAndSaveToStorage(searchWordback);
-            console.log(searchWordback);
-        } else {
-            setTimeout(checkAndProcessSearchWordback, 100);
-        }
-        });
+function checkAndProcessSearchWordback() {
+    chrome.storage.local.get(['searchWordback'], function (result) {
+
+    searchWordback = result.searchWordback;
+    // Check if searchWordback is not empty before sending the request
+    if (searchWordback !== '') {
+        sendRequestAndSaveToStorage(searchWordback);
+        console.log(searchWordback);
+    } else {
+        setTimeout(checkAndProcessSearchWordback, 100);
     }
-    checkAndProcessSearchWordback();
-  });
-  
+    });
+}
+
+window.addEventListener('load', checkAndProcessSearchWordback);
