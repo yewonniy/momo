@@ -99,37 +99,46 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Retrieve searchWord from local storage
-  chrome.storage.local.get(['searchWord'], function (result) {
-    function waitForElements() {
-      const searchInput = document.getElementById('search-input-2');
-      const searchButton = document.getElementById('search-button-2');
+  function waitForElements() {
+    const searchInput = document.getElementById('search-input-2');
+    const searchButton = document.getElementById('search-button-2');
 
-      if (searchInput && searchButton) {
-          // Both elements are found, proceed with the actions
-          searchInput.value = result.searchWord || '';
+    if (searchInput && searchButton) {
+      chrome.storage.local.set({ 'searchWordback': '' }, function () {
+          console.log('searchWordback cleared');
+      });
+      // Both elements are found, proceed with the actions
+      chrome.storage.local.get(['searchWord'], function (result) {
+        var searchWordback = result.searchWord;
+        console.log(searchWordback);
+        searchInput.value = searchWordback;
 
-          // Add click event listener to the button, setting option에 따라 if문 작성
-          if (trigger_option === "passive") {
-            searchButton.addEventListener('click', function () {
-                console.log('button clicked');
-                chrome.storage.local.set({ 'searchWordback': result.searchWord });
-                chrome.runtime.sendMessage({
-                    type: 'searchButtonClicked',
-                });
+        // Clear searchWordback in local storage
+        
+
+        // Set searchWordback in local storage to result.searchWord
+        
+        // Add click event listener to the button, setting option에 따라 if문 작성
+        if (trigger_option === "passive") {
+          searchButton.addEventListener('click', function () {
+            console.log('button clicked');
+            chrome.runtime.sendMessage({
+              type: 'searchButtonClicked',
             });
-            searchButton.click();
-          }
-          
-      } else {
-          // One or both elements are not found, wait and try again
-          setTimeout(waitForElements, 100); // Adjust the delay time as needed
-      }
+            chrome.storage.local.set({ 'searchWordback': searchWordback || '' }, function () {
+              console.log('searchWordback updated');
+            });
+          });
+          searchButton.click();
+        }
+      });
+
+    } else {
+      // One or both elements are not found, wait and try again
+      setTimeout(waitForElements, 100); // Adjust the delay time as needed
+    }
   }
 
   // Start waiting for elements
   waitForElements();
-  });
-  
-  // Perform any other actions with searchWord if needed
 });
