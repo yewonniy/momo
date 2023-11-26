@@ -47,14 +47,13 @@ function insertIframe(iframe, container, isRhsContainer) {
         container.style.display = 'flex';
         container.style.flexDirection = 'row';
         iframe.style.display = 'flex';
-        iframe.style.marginleft = '50px';
+        iframe.style.marginLeft = '10px';
         container.appendChild(iframe);
     }
 }
 function iframeInDocument() {
     return document.querySelector('iframe[src="' + chrome.runtime.getURL('home.html') + '"]') != null;
 }
-
 
 
 
