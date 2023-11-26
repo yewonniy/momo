@@ -94,6 +94,9 @@ function sendRequestAndSaveToStorage(inputWord) {
             chrome.storage.local.set({ 'searchResult': data }, function () {
                 console.log('Data saved to local storage:', data);
             });
+            chrome.storage.local.set({ 'searchWordback': '' }, function () {
+                console.log('searchWordback cleared');
+            });
         })
         .catch(error => {
             console.error('Error fetching data:', error);
