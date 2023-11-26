@@ -28,17 +28,23 @@ async function onGoogleSearchLoad() {
 }
 
 function setupIframe(iframe) {
-    iframe.style.width = '431px';
-    iframe.style.height = '400px';
+    // Setup iframe properties
+    iframe.style.width = '500px';
+    iframe.style.height = '500px';
     iframe.style.border = 'none';
     iframe.style.display = 'flex';
     iframe.src = chrome.runtime.getURL('home.html');
 
-    const targetContainer = document.querySelector('#rcnt');
-    if (targetContainer) {
-        targetContainer.style.display = 'flex';
-        targetContainer.style.flexDirection = 'row';
-        targetContainer.appendChild(iframe);
+    // Check for #rhs element
+    const rhsContainer = document.querySelector('#rhs');
+    if (rhsContainer) {
+        rhsContainer.insertBefore(iframe, rhsContainer.firstChild);
+    } else {
+        // If #rhs is not present, check for #rcnt and append iframe there
+        const rcntContainer = document.querySelector('#rcnt');
+        if (rcntContainer) {
+            rcntContainer.appendChild(iframe);
+        }
     }
 }
 
@@ -56,20 +62,26 @@ function checkForGoogleSearch() {
 
 window.addEventListener('load', checkForGoogleSearch);
 
-document.getElementById("search-button-2").addEventListener("click", () => {
-    const searchWord = document.getElementById("search-input-2").value;
-    console.log(searchWord);
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const tab = tabs[0];
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            function: message => {
-                chrome.runtime.sendMessage(message);
-            },
-            args: [{ type: 'searching', payload: { message: searchWord } }],
+window.addEventListener('DOMContentLoaded', () => {
+    let searchButton = document.getElementById("search-button-2");
+    if (searchButton) {
+        searchButton.addEventListener("click", () => {
+            const searchWord = document.getElementById("search-input-2").value;
+            console.log(searchWord);
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                const tab = tabs[0];
+                chrome.scripting.executeScript({
+                    target: { tabId: tab.id },
+                    function: message => {
+                        chrome.runtime.sendMessage(message);
+                    },
+                    args: [{ type: 'searching', payload: { message: searchWord } }],
+                });
+            });
         });
-    });
+    }
 });
+
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type == 'googlesearching') {
