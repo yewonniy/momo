@@ -116,18 +116,16 @@ document.addEventListener('DOMContentLoaded', function () {
         
 
         // Set searchWordback in local storage to result.searchWord
-        
-        // Add click event listener to the button, setting option에 따라 if문 작성
-        if (trigger_option === "passive") {
-          searchButton.addEventListener('click', function () {
+        searchButton.addEventListener('click', function () {
             console.log('button clicked');
-            chrome.runtime.sendMessage({
-              type: 'searchButtonClicked',
-            });
+            searchWordback = document.getElementById('search-input-2').value;
+            console.log(searchWordback);
             chrome.storage.local.set({ 'searchWordback': searchWordback || '' }, function () {
               console.log('searchWordback updated');
             });
           });
+        // Add click event listener to the button, setting option에 따라 if문 작성
+        if (trigger_option === "passive") {
           searchButton.click();
         }
       });

@@ -32,10 +32,27 @@ function sendRequestAndSaveToStorage(inputWord) {
             chrome.storage.local.set({ 'searchResult': data }, function () {
                 console.log('Data saved to local storage:', data);
             });
+            chrome.storage.local.set({ 'searchWordback': '' }, function () {
+                console.log('searchWordback cleared');
+            });
         })
         .catch(error => {
             console.error('Error fetching data:', error);
         });
 }
+    // Retrieve searchWordback from local storage
+function checkAndProcessSearchWordback() {
+    chrome.storage.local.get(['searchWordback'], function (result) {
 
-// No need for DOMContentLoaded event listener in background script
+    searchWordback = result.searchWordback;
+    // Check if searchWordback is not empty before sending the request
+    if (searchWordback !== '') {
+        sendRequestAndSaveToStorage(searchWordback);
+        console.log(searchWordback);
+    } else {
+        setTimeout(checkAndProcessSearchWordback, 100);
+    }
+    });
+}
+
+window.addEventListener('load', checkAndProcessSearchWordback);
