@@ -1,5 +1,3 @@
-console.log("Content script is running");
-
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "updateSearch") {
         var searchInput = document.getElementById('search-input');
@@ -7,43 +5,76 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             searchInput.value = request.query;
         }
     }
-});window.onload = function() {
+});
+window.onload = function() {
     var targetContainer = document.querySelector('#rcnt');
     if (!targetContainer) return;
+}
 
-    var checkInterval = setInterval(function() {
-        var rhsContainer = document.querySelector('#rhs');
-        if (rhsContainer) {
-            var iframe = createIframe();
-            insertIframe(iframe, rhsContainer, true);
-            clearInterval(checkInterval);
-        } else if (!iframeInDocument()) { // 이 함수로 iframe 존재 여부를 검사
-            var iframe = createIframe();
-            insertIframe(iframe, targetContainer, false);
-        }
-    }, 1000);
-};
+async function waitForElement(id) {
+    while (document.getElementById(id) === null) {
+        await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+    return document.getElementById(id);
+}
+let searchWord;
 
-function createIframe() {
-    var iframe = document.createElement('iframe');
-    iframe.src = chrome.runtime.getURL('home.html');
+// Google 검색창이 로드된 후 실행될 함수
+async function onGoogleSearchLoad() {
+    // 대기 시간 (밀리초) 설정
+    const delayTime = 2000; // 예: 2초 대기
+
+    // Google 검색창 로드 후 일정 시간 대기
+    await new Promise(resolve => setTimeout(resolve, delayTime));
+
+    // id가 APjFqb인 검색어를 가져와서 저장
+    searchWord = document.getElementById('APjFqb').value;
+
+    // 검색어 출력
+    console.log('검색어:', searchWord);
+    // 여기서 검색어(searchWord) 변수를 활용하여 원하는 작업을 수행할 수 있습니다.
+    chrome.storage.local.set({ 'searchWord': searchWord });
+
+            // 변수에 값이 할당된 후에 메시지를 보내야 합니다.
+        
+    // 여기서 검색어(searchWord) 변수를 활용하여 원하는 작업을 수행할 수 있습니다.
+
+    // iframe 추가
+    const iframe = document.createElement('iframe');
     iframe.style.width = '431px';
     iframe.style.height = '400px';
     iframe.style.border = 'none';
-    return iframe;
+    iframe.style.display = 'flex';
+    iframe.src = chrome.runtime.getURL('home.html');
+    
+    // iframe 추가
+    const targetContainer = document.querySelector('#rcnt');
+    if (targetContainer) {
+        targetContainer.style.display = 'flex';
+        targetContainer.style.flexDirection = 'row';
+        targetContainer.appendChild(iframe);
+    }
+}
+// 페이지가 로드된 후 Google 검색창이 있는지 확인하고, 있다면 onGoogleSearchLoad 함수 실행
+function checkForGoogleSearch() {
+    const googleSearchInput = document.querySelector('#sfcnt');
+    
+    if (googleSearchInput) {
+        // Google 검색창이 있을 경우
+        onGoogleSearchLoad().then(
+            chrome.runtime.sendMessage({
+                type: 'searchButtonClicked',
+            })
+        )
+    } else {
+        // Google 검색창이 없을 경우, 재귀적으로 확인
+        setTimeout(checkForGoogleSearch, 100);
+    }
 }
 
-function insertIframe(iframe, container, isRhsContainer) {
-    if (isRhsContainer) {
-        iframe.style.position = 'relative';
-        iframe.style.zIndex = 3;
-        // #rhs 컨테이너의 첫 번째 자식으로 iframe 삽입
-        if (container.firstChild) {
-            container.insertBefore(iframe, container.firstChild);
-        } else {
-            container.appendChild(iframe);
-        }
-    } else {
+
+// 페이지가 로드된 후 Google 검색창 확인
+window.addEventListener('load', checkForGoogleSearch);
         container.style.display = 'flex';
         container.style.flexDirection = 'row';
         iframe.style.display = 'flex';
