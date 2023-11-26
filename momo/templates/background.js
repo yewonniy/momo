@@ -101,9 +101,20 @@ function sendRequestAndSaveToStorage(inputWord) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.get(['searchWordback'], function (result) {
-        var searchWordback = result.searchWordback;
-        console.log(searchWordback);
-        sendRequestAndSaveToStorage(searchWordback);
-    });
-});
+    // Retrieve searchWordback from local storage
+    function checkAndProcessSearchWordback() {
+        chrome.storage.local.get(['searchWordback'], function (result) {
+    
+        searchWordback = result.searchWordback;
+        // Check if searchWordback is not empty before sending the request
+        if (searchWordback !== '') {
+            sendRequestAndSaveToStorage(searchWordback);
+            console.log(searchWordback);
+        } else {
+            setTimeout(checkAndProcessSearchWordback, 100);
+        }
+        });
+    }
+    checkAndProcessSearchWordback();
+  });
+  
