@@ -56,30 +56,37 @@ function checkForGoogleSearch() {
 
 window.addEventListener('load', checkForGoogleSearch);
 
-document.getElementById("search-button-2").addEventListener("click", () => {
-    const searchWord = document.getElementById("search-input-2").value;
-    console.log(searchWord);
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const tab = tabs[0];
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            function: message => {
-                chrome.runtime.sendMessage(message);
-            },
-            args: [{ type: 'searching', payload: { message: searchWord } }],
-        });
-    });
-});
+// document.getElementById("search-button-2").addEventListener("click", () => {
+//     const searchWord = document.getElementById("search-input-2").value;
+//     console.log(searchWord);
+//     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+//         const tab = tabs[0];
+//         chrome.scripting.executeScript({
+//             target: { tabId: tab.id },
+//             function: message => {
+//                 chrome.runtime.sendMessage(message);
+//             },
+//             args: [{ type: 'searching', payload: { message: searchWord } }],
+//         });
+//     });
+// });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type == 'googlesearching') {
-        const inputElement = document.getElementById('search-input-2');
-        const buttonElement = document.getElementById('search-button-2');
-        if (inputElement) {
-            inputElement.value = request.payload.message;
-        }
-        if (buttonElement) {
-            buttonElement.click();
-        }
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//     if (request.type == 'googlesearching') {
+//         const inputElement = document.getElementById('search-input-2');
+//         const buttonElement = document.getElementById('search-button-2');
+//         if (inputElement) {
+//             inputElement.value = request.payload.message;
+//         }
+//         if (buttonElement) {
+//             buttonElement.click();
+//         }
+//     }
+// });
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.type === 'searchButtonClicked') {
+        console.log('메세지 옴');
+        searchWord = request.payload.message
+        console.log(searchWord);
     }
-});
+  });

@@ -97,6 +97,7 @@ function sendRequestAndSaveToStorage(inputWord) {
             chrome.storage.local.set({ 'searchWordback': '' }, function () {
                 console.log('searchWordback cleared');
             });
+            window.postMessage({ type: 'datapush' }, '*');
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -104,18 +105,29 @@ function sendRequestAndSaveToStorage(inputWord) {
 }
 
     // Retrieve searchWordback from local storage
-function checkAndProcessSearchWordback() {
-    chrome.storage.local.get(['searchWordback'], function (result) {
+// function checkAndProcessSearchWordback() {
+//     chrome.storage.local.get(['searchWordback'], function (result) {
 
-    searchWordback = result.searchWordback;
-    // Check if searchWordback is not empty before sending the request
-    if (searchWordback !== '') {
-        sendRequestAndSaveToStorage(searchWordback);
-        console.log(searchWordback);
-    } else {
-        setTimeout(checkAndProcessSearchWordback, 100);
+//     searchWordback = result.searchWordback;
+//     // Check if searchWordback is not empty before sending the request
+//     if (searchWordback !== '') {
+//         sendRequestAndSaveToStorage(searchWordback);
+//         console.log(searchWordback);
+//     } else {
+//         setTimeout(checkAndProcessSearchWordback, 100);
+//     }
+//     });
+// }
+
+window.addEventListener('message', function(event) {
+    if (event.source !== window) return;
+
+    const message = event.data;
+
+    if (message && message.type === 'searchButtonClicked') {
+        console.log('메세지 옴');
+        const searchWord = message.message;
+        console.log(searchWord);
+        sendRequestAndSaveToStorage(searchWord);
     }
-    });
-}
-
-window.addEventListener('load', checkAndProcessSearchWordback);
+});
