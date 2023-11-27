@@ -61,7 +61,7 @@ def home(request):
             END OF EXAMPLE
             
             OUTPUT FORMAT:
-            ten similar Enlgish words"""
+            similar_English_word (pronounciation): definition"""
             
 
             conversation = []
