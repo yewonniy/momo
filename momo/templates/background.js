@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 function sendRequestAndSaveToStorage(inputWord) {
     console.log(inputWord);
     // Send data to an external URL
-    fetch('https://port-0-momo-5mk12alp3wgrdi.sel5.cloudtype.app/?input_word=' + inputWord)
+    fetch(`https://port-0-momo-5mk12alp3wgrdi.sel5.cloudtype.app/word=${inputWord}`)
         .then(response => response.json())
         .then(data => {
             // Save the result to Chrome local storage

@@ -52,9 +52,7 @@ function checkForGoogleSearch() {
     const googleSearchInput = document.querySelector('#sfcnt');
     
     if (googleSearchInput) {
-        onGoogleSearchLoad().then(() => {
-            chrome.runtime.sendMessage({ type: 'searchButtonClicked' });
-        });
+        onGoogleSearchLoad();
     } else {
         setTimeout(checkForGoogleSearch, 100);
     }
@@ -62,20 +60,20 @@ function checkForGoogleSearch() {
 
 window.addEventListener('load', checkForGoogleSearch);
 
-// document.getElementById("search-button-2").addEventListener("click", () => {
-//     const searchWord = document.getElementById("search-input-2").value;
-//     console.log(searchWord);
-//     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-//         const tab = tabs[0];
-//         chrome.scripting.executeScript({
-//             target: { tabId: tab.id },
-//             function: message => {
-//                 chrome.runtime.sendMessage(message);
-//             },
-//             args: [{ type: 'searching', payload: { message: searchWord } }],
-//         });
-//     });
-// });
+document.getElementById("search-button-2").addEventListener("click", () => {
+    const searchWord = document.getElementById("search-input-2").value;
+    console.log(searchWord);
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const tab = tabs[0];
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            function: message => {
+                chrome.runtime.sendMessage(message);
+            },
+            args: [{ type: 'searching', payload: { message: searchWord } }],
+        });
+    });
+});
 
 // chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 //     if (request.type == 'googlesearching') {
