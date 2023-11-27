@@ -39,4 +39,11 @@ function onClick(e) {
   } else {
     option2_b.checked = true;
   }
+  document.addEventListener('DOMContentLoaded', function () {
+    const saveButton = document.getElementById('save-button');
   
+    // 'save-button'를 클릭할 때 창을 닫습니다.
+    saveButton.addEventListener('click', function () {
+      window.close();
+    });
+  });

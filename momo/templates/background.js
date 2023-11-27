@@ -55,8 +55,9 @@ function sendRequestAndSaveToStorage(inputWord) {
 //     }
 //     });
 // }
-
-window.addEventListener('message', function(event) {
+document.addEventListener('DOMContentLoaded', function() {
+    // 여기에 코드를 작성하세요.
+    window.addEventListener('message', function(event) {
     if (event.source !== window) return;
 
     const message = event.data;
@@ -67,4 +68,5 @@ window.addEventListener('message', function(event) {
         console.log(searchWord);
         sendRequestAndSaveToStorage(searchWord);
     }
+    });
 });

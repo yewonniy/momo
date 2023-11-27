@@ -2,7 +2,7 @@ const container = document.getElementsByClassName("results-container")[0];
 
 const trigger_option = localStorage.getItem("trigger_option");
 const setting_option = localStorage.getItem("setting_option");
-document.getElementById('settings-button').addEventListener('click', goToSettings);
+// document.getElementById('settings-button').addEventListener('click', goToSettings);
 
 const showingLists = (words, type) => {
   while (container.firstChild) {
@@ -81,22 +81,46 @@ if (trigger_option === "passive") {
   // 이하 코드는 여기에 작성
   getMessage(setting_option);
 }
+document.addEventListener('DOMContentLoaded', function () {
+  // 'settings-button' 요소를 찾아서 클릭 이벤트를 추가합니다.
+  const settingsButton = document.getElementById('settings-button');
+  settingsButton.addEventListener('click', function () {
+    // 버튼이 클릭되면 setting.html로 이동합니다.
+    // 현재 페이지 URL에 대한 인코딩을 수행합니다.
+    const encodedUrl = encodeURIComponent(window.location.href);
 
-function goToSettings() {
-  chrome.runtime.sendMessage({action: "getTabUrl"}, function(response) {
-      if (chrome.runtime.lastError) {
-          console.error("Runtime Error: ", chrome.runtime.lastError);
-          return;
-      }
-
-      if (response && response.url) {
-          var settingsUrl = chrome.runtime.getURL('setting.html') + '?returnUrl=' + encodeURIComponent(response.url);
-          window.open(settingsUrl, '_blank');
-      } else {
-          console.error("Error getting the tab URL or no URL present");
-      }
+    // 버튼이 클릭되면 새로운 창을 열고 setting.html로 인코딩된 URL을 포함하여 이동합니다.
+    window.open(`setting.html?url=${encodedUrl}`, '_blank');
   });
-}
+});
+
+// function goToSettings() {
+//   window.postMessage({ action: "getTabUrl"}, function(response) {
+//     if (chrome.runtime.lastError) {
+//         console.error("Runtime Error: ", chrome.runtime.lastError);
+//         return;
+//     }
+
+//     if (response && response.url) {
+//         var settingsUrl = chrome.runtime.getURL('setting.html') + '?returnUrl=' + encodeURIComponent(response.url);
+//         window.open(settingsUrl, '_blank');
+//     } else {
+//         console.error("Error getting the tab URL or no URL present");
+//     }}, '*');
+  // chrome.runtime.sendMessage({}, function(response) {
+  //     if (chrome.runtime.lastError) {
+  //         console.error("Runtime Error: ", chrome.runtime.lastError);
+  //         return;
+  //     }
+
+  //     if (response && response.url) {
+  //         var settingsUrl = chrome.runtime.getURL('setting.html') + '?returnUrl=' + encodeURIComponent(response.url);
+  //         window.open(settingsUrl, '_blank');
+  //     } else {
+  //         console.error("Error getting the tab URL or no URL present");
+  //     }
+  // });
+// }
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.type === 'searchWord') {
       console.log('메세지 옴')
@@ -138,11 +162,10 @@ document.addEventListener('DOMContentLoaded', function () {
               console.log('searchWordback updated');
             });
           });
-        // Add click event listener to the button, setting option에 따라 if문 작성
-        // if (trigger_option === "passive") {
-        //   searchButton.click();
-        // }
-        searchButton.click();
+        //Add click event listener to the button, setting option에 따라 if문 작성
+        if (trigger_option === "active") {
+          searchButton.click();
+        }
       });
 
     } else {
