@@ -5,6 +5,9 @@ const setting_option = localStorage.getItem("setting_option");
 document.getElementById('settings-button').addEventListener('click', goToSettings);
 
 const showingLists = (words, type) => {
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
   const res = words[0];
   const ul = document.createElement("ul");
 
@@ -17,7 +20,7 @@ const showingLists = (words, type) => {
     definitionIndex = res[key].indexOf(':');
     definition = res[key].substring(definitionIndex + 1).trim();
 
-    if (type === "no_pron") {
+    if (type === "yes_pron") {
       li_text = key + " " + `(${pronounciation})` + " : " + definition;
     } else {
       li_text = key + " : " + definition;
@@ -32,17 +35,27 @@ const showingLists = (words, type) => {
 
 document.addEventListener('DOMContentLoaded', function () {
   // background.js에서 로컬 스토리지에서 검색 결과를 가져오는 코드를 추가
-  chrome.storage.local.get(['searchResult'], function (result) {
-      const searchResult = result.searchResult;
+  window.addEventListener('message', function(event) {
+    if (event.source !== window) return;
 
-      // 검색 결과가 있는지 확인
-      if (searchResult) {
-          // 검색 결과를 사용하여 페이지를 수정하는 코드
-          showingLists(searchResult, setting_option);
-      } else {
-          console.log('No search result found.');
-      }
+    const message = event.data;
+
+    if (message && message.type === 'datapush') {
+      console.log('data 메세지 옴');
+      chrome.storage.local.get(['searchResult'], function (result) {
+        const searchResult = result.searchResult;
+
+        // 검색 결과가 있는지 확인
+        if (searchResult) {
+            // 검색 결과를 사용하여 페이지를 수정하는 코드
+            showingLists(searchResult, setting_option);
+        } else {
+            console.log('No search result found.');
+        }
   });
+    }
+});
+  
 });
 
 const getMessage = (setting_option) => {
@@ -120,14 +133,16 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('button clicked');
             searchWordback = document.getElementById('search-input-2').value;
             console.log(searchWordback);
+            window.postMessage({ type: 'searchButtonClicked', message: searchWordback }, '*');
             chrome.storage.local.set({ 'searchWordback': searchWordback || '' }, function () {
               console.log('searchWordback updated');
             });
           });
         // Add click event listener to the button, setting option에 따라 if문 작성
-        if (trigger_option === "passive") {
-          searchButton.click();
-        }
+        // if (trigger_option === "passive") {
+        //   searchButton.click();
+        // }
+        searchButton.click();
       });
 
     } else {
