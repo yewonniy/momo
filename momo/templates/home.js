@@ -16,7 +16,8 @@ const showingLists = (words, type) => {
 
     key = key_list[idx];
     pronounciation = res[key][0];
-    definition = res[key][1];
+    definitionIndex = res[key].indexOf(":");
+    definition = res[key].substring(definitionIndex + 1).trim();
 
     if (type === "no_pron") {
       li_text = key + " " + `(${pronounciation})` + " : " + definition;
@@ -31,25 +32,43 @@ const showingLists = (words, type) => {
   container.appendChild(ul);
 };
 
+document.addEventListener("DOMContentLoaded", function () {
+  // background.js에서 로컬 스토리지에서 검색 결과를 가져오는 코드를 추가
+  chrome.storage.local.get(["searchResult"], function (result) {
+    const searchResult = result.searchResult;
+
+    // 검색 결과가 있는지 확인
+    if (searchResult) {
+      // 검색 결과를 사용하여 페이지를 수정하는 코드
+      showingLists(searchResult, setting_option);
+    } else {
+      console.log("No search result found.");
+    }
+  });
+});
+
+const getMessage = (setting_option) => {
+  window.onload = function () {
+    chrome.runtime.onMessage.addListener((request) => {
+      if (request.type == "listmessage") {
+        const words = request.payload.message;
+        showingLists(words, setting_option);
+      }
+    });
+  };
+};
+
 if (trigger_option === "passive") {
   const basic_text = document.createElement("p");
-  basic_text.innerHTML = "영어사운드매치를 사용하려면 검색 버튼을 클릭하세요.";
+  basic_text.innerHTML =
+    "영어사운드매치를 사용해보려면 검색 버튼을 클릭하세요.";
   container.append(basic_text);
-  // 검색 트래킹 x
-  // 값을 가져올 때 setting_option 확인
-  // const 가져온값 = await fetch('url')
-  // const jsonData = await response.json();
-  // console.log(jsonData);
-  showingLists(response, setting_option);
-} else {
-  // automatic
 
-  // content 검색 트래킹
-  // background.js에 요청
-  // background.js에서 end point에 fetch
-  // const 가져온값 = await fetch('url')
-  // const jsonData = await response.json();
-  showingLists(response, setting_option);
+  getMessage(setting_option);
+} else {
+  console.log("자동");
+  // 이하 코드는 여기에 작성
+  getMessage(setting_option);
 }
 
 function goToSettings() {
@@ -70,8 +89,62 @@ function goToSettings() {
     }
   });
 }
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.type === "searchWord") {
+    console.log("메세지 옴");
+    const searchInput = document.getElementById("search-input-2");
+    if (searchInput) {
+      searchInput.value = request.data;
+      console.log("변경됨");
+      // 변경된 값을 다시 script.js로 메시지 전송
+      chrome.runtime.sendMessage({
+        type: "inputValueChanged",
+        data: request.data,
+      });
+    }
+  }
+});
 
-function search() {
-  console.log("검색 기능 수행");
-  // 이하 검색 기능 구현 코드
-}
+document.addEventListener("DOMContentLoaded", function () {
+  function waitForElements() {
+    const searchInput = document.getElementById("search-input-2");
+    const searchButton = document.getElementById("search-button-2");
+
+    if (searchInput && searchButton) {
+      chrome.storage.local.set({ searchWordback: "" }, function () {
+        console.log("searchWordback cleared");
+      });
+      // Both elements are found, proceed with the actions
+      chrome.storage.local.get(["searchWord"], function (result) {
+        var searchWordback = result.searchWord;
+        console.log(searchWordback);
+        searchInput.value = searchWordback;
+
+        // Clear searchWordback in local storage
+
+        // Set searchWordback in local storage to result.searchWord
+        searchButton.addEventListener("click", function () {
+          console.log("button clicked");
+          searchWordback = document.getElementById("search-input-2").value;
+          console.log(searchWordback);
+          chrome.storage.local.set(
+            { searchWordback: searchWordback || "" },
+            function () {
+              console.log("searchWordback updated");
+            }
+          );
+        });
+        // Add click event listener to the button, setting option에 따라 if문 작성
+        if (trigger_option === "passive") {
+          searchButton.click();
+        }
+      });
+    } else {
+      // One or both elements are not found, wait and try again
+      setTimeout(waitForElements, 100); // Adjust the delay time as needed
+    }
+  }
+
+  // Start waiting for elements
+  waitForElements();
+});

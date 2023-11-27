@@ -13,21 +13,22 @@ body {
   justify-content: flex-start;
   padding-left: 2rem;
   height: 6rem;
-  margin: 10px;
+  margin: 1rem; /* Converted from 10px to 1rem */
+  box-shadow: 0 0 0.3125rem rgba(0, 0, 0, 0.5); /* Converted from 5px to 0.3125rem */
 }
 
 #logo {
-  max-width: 37px;
+  max-width: 2.3125rem; /* Converted from 37px to 2.3125rem */
   height: auto;
   margin-right: 0.8rem;
-  border-radius: 30px;
+  border-radius: 1.875rem; /* Converted from 30px to 1.875rem */
 }
 
 .settings-container {
-  width: 600px;
-  margin: 50px auto;
+  width: 37.5rem; /* Converted from 600px to 37.5rem */
+  margin: 3.125rem auto; /* Converted from 50px to 3.125rem */
   background-color: white;
-  padding: 20px;
+  padding: 1.25rem; /* Converted from 20px to 1.25rem */
 }
 
 .title {
@@ -45,6 +46,7 @@ body {
 #trigger {
   width: 2rem;
   height: 2rem;
+  margin-left: 1rem;
 }
 
 #setting-mode {
@@ -56,24 +58,25 @@ body {
 #setting {
   width: 2rem;
   height: 2rem;
+  margin-left: 1rem;
 }
 
 .option-group {
-  border-radius: 5px;
+  border-radius: 0.3125rem; /* Converted from 5px to 0.3125rem */
   background-color: #f1f3f5;
-  margin: 10px;
-  padding: 2rem;
+  margin: 1rem; /* Converted from 10px to 1rem */
+  padding: 0.125rem; /* Converted from 2px to 0.125rem */
 }
 
 .option {
   margin-top: 0.5rem;
-  margin-bottom: 5px;
+  margin-bottom: 0.3125rem; /* Converted from 5px to 0.3125rem */
   font-size: 1.25rem;
   margin-left: 1rem;
 }
 
 input[type="radio"] {
-  margin-right: 10px;
+  margin-right: 0.625rem; /* Converted from 10px to 0.625rem */
 }
 
 .group-title {
@@ -91,4 +94,25 @@ input[type="radio"] {
   color: #868e96;
   margin-top: -0.5rem;
   margin-left: 2rem;
+}
+
+#save-button {
+  background-color: #2b2b2b;
+  border: none;
+  color: white;
+  padding: 0.9375rem 1.875rem; /* Converted from 15px 30px to 0.9375rem 1.875rem */
+  width: 5.9375rem; /* Converted from 95px to 5.9375rem */
+  height: 3.125rem; /* Converted from 50px to 3.125rem */
+  text-align: center;
+  display: inline-block;
+  font-size: 1rem; /* Converted from 16px to 1rem */
+  margin: 0.25rem 0.125rem; /* Converted from 4px 2px to 0.25rem 0.125rem */
+  border-radius: 1.875rem; /* Converted from 30px to 1.875rem */
+  box-shadow: 0 0 0.3125rem rgba(0, 0, 0, 0.5); /* Converted from 5px to 0.3125rem */
+}
+
+.save-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem; /* Converted from 10px to 1rem */
 }

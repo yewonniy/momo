@@ -1,45 +1,58 @@
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action === "getTabUrl") {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            if (chrome.runtime.lastError) {
-                console.error("Error in tabs.query: ", chrome.runtime.lastError);
-                sendResponse({url: null});
-                return;
-            }
-
-            if (tabs.length > 0 && tabs[0].url) {
-                sendResponse({url: tabs[0].url});
-            } else {
-                sendResponse({url: null}); // Send a response even if no URL is found
-            }
-        });
-        return true; // This is crucial for asynchronous response
-    }
-    // Handle other actions
-});
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action === "updateSearch") {
-        // Forward the search query to home.html
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, request);
-        });
-    }
-});
-
 // background.js
 
-let searchWord; // 변수를 미리 선언해주세요.
+let searchWordback;
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type == 'searching') {
-        searchWord = request.payload.message;
-        console.log(searchWord);
-        sendResponse({
-            message: searchWord,
+// Listen for messages from other parts of the extension
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.type === 'searchButtonClicked') {
+        chrome.storage.local.get(['searchWord'], function (result) {
+            searchWordback = result.searchWord;
+            console.log(searchWordback);
+
+            // Send the request and handle the response
+            sendRequestAndSaveToStorage(searchWordback);
+            someAsyncFunction().then(result => {
+                sendResponse(result);
+            });
+            return true;
         });
-    } 
-    return true; // 비동기로 작업 시 필요
+        return true; // Indicate async response
+    }
+    // Handle other message types...
 });
 
+function sendRequestAndSaveToStorage(inputWord) {
+    console.log(inputWord);
+    // Send data to an external URL
+    fetch('https://port-0-momo-5mk12alp3wgrdi.sel5.cloudtype.app/?input_word=' + inputWord)
+        .then(response => response.json())
+        .then(data => {
+            // Save the result to Chrome local storage
+            console.log(data);
+            chrome.storage.local.set({ 'searchResult': data }, function () {
+                console.log('Data saved to local storage:', data);
+            });
+            chrome.storage.local.set({ 'searchWordback': '' }, function () {
+                console.log('searchWordback cleared');
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+    // Retrieve searchWordback from local storage
+function checkAndProcessSearchWordback() {
+    chrome.storage.local.get(['searchWordback'], function (result) {
 
+    searchWordback = result.searchWordback;
+    // Check if searchWordback is not empty before sending the request
+    if (searchWordback !== '') {
+        sendRequestAndSaveToStorage(searchWordback);
+        console.log(searchWordback);
+    } else {
+        setTimeout(checkAndProcessSearchWordback, 100);
+    }
+    });
+}
+
+window.addEventListener('load', checkAndProcessSearchWordback);
