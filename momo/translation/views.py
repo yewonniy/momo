@@ -51,6 +51,21 @@ def home(request):
             Ornament (오나먼트): 장식
             
             END OF EXAMPLE
+            EXAMPLE OF OUTPUT 1:
+            input: 어그먼트
+            output:
+            Argument (어그먼트): 논쟁, 주장
+            Augment (어그먼트): 증가시키다, 향상시키다
+            Armament (아머먼트): 무장, 무기
+            Ointment (오인트먼트): 연고
+            Agreement (어그리먼트): 합의, 동의;
+            Arrogant (아로건트): 거만한
+            Argonaut (아거노트): 모험가
+            Apartment (아파트먼트): 아파트
+            Alignment (어라인먼트): 정렬
+            Ornament (오나먼트): 장식
+            
+            END OF EXAMPLE
 
             EXAMPLE OF OUTPUT 2:
             input: 햅삐
@@ -71,6 +86,9 @@ def home(request):
             similar_English_word (pronounciation): definition"""
             
 
+            conversation = []
+            conversation.append({"role": "system", "content": system_prompt})
+            conversation.append({"role": "user", "content": user_input})
             conversation = []
             conversation.append({"role": "system", "content": system_prompt})
             conversation.append({"role": "user", "content": user_input})
