@@ -17,7 +17,7 @@ const showingLists = (words, type) => {
 
     const li = document.createElement("li");
     if (type === "yes_pron") {
-      li_text = word + pronun + " : " + value;
+      li_text = word + "" + pronun + " : " + value;
     } else {
       li_text = word + " : " + value;
     }
