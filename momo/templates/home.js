@@ -48,9 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   });
-    }
-});
-  
 });
 
 const getMessage = (setting_option) => {
@@ -175,5 +172,5 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Start waiting for elements
-  waitForElements();
+  waitForElements()
 });
