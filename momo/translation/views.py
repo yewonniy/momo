@@ -9,8 +9,7 @@ API_KEY = settings.API_KEY
 # Create your views here.
 def home(request):
     if request.method == 'GET':
-        # user_input = request.GET.get('word', False)
-        user_input = "재팬"
+        user_input = request.GET.get('word', False)
         print(user_input)
         import openai
         import os
