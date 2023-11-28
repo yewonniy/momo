@@ -24,7 +24,7 @@ const showingLists = (words, setting_option) => {
     definitionIndex = res[key].indexOf(":");
     definition = res[key].substring(definitionIndex + 1).trim();
 
-    if (type === "yes_pron") {
+    if (setting_option === "yes_pron") {
       li_text = key + " " + `(${pronounciation})` + " : " + definition;
     } else {
       li_text = word + " : " + value;
