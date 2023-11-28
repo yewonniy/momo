@@ -28,7 +28,7 @@ def home(request):
                 # 중복인 게 있으면 data_list에 넣지 않음 (중복되는 게 3개면 그냥 7개 단어만 보여줌)
                 if output_list[i-1] !="중복":
                     data = {}
-                    data[user_input] = output_list[i-1]
+                    data['word'] = output_list[i-1]
                     output_info = Word.objects.get(word = output_list[i-1])
                     data["pronun"] = output_info.pronounciation
                     data["value"] = output_info.definition
@@ -101,7 +101,7 @@ def home(request):
                 else: 
                     find_duplicate.append(eng)
                     data = {}
-                    data[user_input] = eng
+                    data['word'] = eng
                     data["pronun"] = pronunciation
                     data["value"] = korean_meaning
                     data_list.append(data)
@@ -130,17 +130,17 @@ def home(request):
             #  data_list = 
             #             [
             # {
-            #     "애로건트": "Arrogant",
+            #     "word": "Arrogant",
             #     "pronun": "(애로건트)",
             #     "value": "거만한"
             # },
             # {
-            #     "애로건트": "Argonaut",
+            #     "word": "Argonaut",
             #     "pronun": "(아거노트)",
             #     "value": "모험가"
             # },
             # {
-            #     "애로건트": "Apartment",
+            #     "word": "Apartment",
             #     "pronun": "(아파트먼트)",
             #     "value": "아파트"
             # },
@@ -148,7 +148,7 @@ def home(request):
             #       .
             #       .
             # {
-            #     "애로건트": "Agreement",
+            #     "word": "Agreement",
             #     "pronun": "(어그리먼트)",
             #     "value": "합의, 동의"
             # }
