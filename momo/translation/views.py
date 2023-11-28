@@ -2,13 +2,15 @@ from django.shortcuts import render
 from django.conf import settings
 from django.http import JsonResponse 
 from .models import Word
+from .models import Output
 
 API_KEY = settings.API_KEY
 
 # Create your views here.
 def home(request):
     if request.method == 'GET':
-        user_input = request.GET.get('word', False)
+        # user_input = request.GET.get('word', False)
+        user_input = "재팬"
         print(user_input)
         import openai
         import os
@@ -16,20 +18,23 @@ def home(request):
         model = "gpt-3.5-turbo"
 
         try:
-            word = Word.objects.get(input_word=user_input)
+            word = Output.objects.get(input_word=user_input)
             
-            data = {}
-            line = word.output_word.split("/")
-            for i in range(10):
-                split_word = line[i].split(")")
-                key = split_word[0]+")"
-                value = split_word[1]
-                
-                data[key] = key
-                data[pro] = pro
-                data[value] = value
+            data_list = []
+            output_list = []
+            for i in range(1, 11):
+                output_list.append(getattr(word, f"output{i}"))
 
-        except Word.DoesNotExist:
+                # 중복인 게 있으면 data_list에 넣지 않음 (중복되는 게 3개면 그냥 7개 단어만 보여줌)
+                if output_list[i-1] !="중복":
+                    data = {}
+                    data[user_input] = output_list[i-1]
+                    output_info = Word.objects.get(word = output_list[i-1])
+                    data["pronun"] = output_info.pronounciation
+                    data["value"] = output_info.definition
+                    data_list.append(data)
+
+        except Output.DoesNotExist:
             system_prompt = """You are the best Korean, English and linguistic expert. If I tell you Korean pronunciation, answer 10 similar English words, their pronunciation, and definition.
 
             EXAMPLE OF OUTPUT 1:
@@ -82,24 +87,71 @@ def home(request):
             lines = response.strip().split('\n')
             #print(lines)
 
-            output_word = ""
-            data = {}
+            data_list = []
+            find_duplicate = []
+            output = [] # Output 테이블에 output1, outpu2, ... output10을 저장하기 위함.
             for line in lines:
-                key_pro, value = line.split(':')
-                key = key_pro.split()[0].strip() # 영어 단어만 추출
-                pro = key_pro.split()[1].strip() # 발음만 추출
-                value = value.strip() # 값 정리
-                output_word = output_word + key_pro + value + "/"
-                
-                data[key] = key
-                data[pro] = pro
-                data[value] = value
+                eng_and_pro, korean_meaning = line.split(':')
+                eng = eng_and_pro.split()[0].strip()
+                pronunciation = eng_and_pro.split()[1].strip()
+                korean_meaning = korean_meaning.strip()
 
-            # word 객체 생성
-            input_word = user_input
-            Word.objects.create(
-                input_word = input_word,
-                output_word = output_word
+                if eng in find_duplicate: # 중복이면 Output테이블의 n번째 output에 "중복"을 저장, Word 테이블은 아예 생성 X
+                    output.append("중복")
+                else: 
+                    find_duplicate.append(eng)
+                    data = {}
+                    data[user_input] = eng
+                    data["pronun"] = pronunciation
+                    data["value"] = korean_meaning
+                    data_list.append(data)
+                    output.append(eng)
+                
+                    Word.objects.create(
+                        word = eng,
+                        pronounciation = pronunciation,
+                        definition = korean_meaning
+                    )
+
+            Output.objects.create(
+                input_word = user_input,
+                output1 = output[0],
+                output2 = output[1],
+                output3 = output[2],
+                output4 = output[3],
+                output5 = output[4],
+                output6 = output[5],
+                output7 = output[6],
+                output8 = output[7],
+                output9 = output[8],
+                output10 = output[9],
             )
 
-        return JsonResponse([data], safe=False)
+            #  data_list = 
+            #             [
+            # {
+            #     "애로건트": "Arrogant",
+            #     "pronun": "(애로건트)",
+            #     "value": "거만한"
+            # },
+            # {
+            #     "애로건트": "Argonaut",
+            #     "pronun": "(아거노트)",
+            #     "value": "모험가"
+            # },
+            # {
+            #     "애로건트": "Apartment",
+            #     "pronun": "(아파트먼트)",
+            #     "value": "아파트"
+            # },
+            #       .
+            #       .
+            #       .
+            # {
+            #     "애로건트": "Agreement",
+            #     "pronun": "(어그리먼트)",
+            #     "value": "합의, 동의"
+            # }
+            # ]
+
+        return JsonResponse(data_list, safe=False)
