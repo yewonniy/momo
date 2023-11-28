@@ -6,12 +6,17 @@ document
   .getElementById("settings-button")
   .addEventListener("click", goToSettings);
 
-const showingLists = (words, type) => {
-  const res = words[0];
+const showingLists = (words, setting_option) => {
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
   const ul = document.createElement("ul");
+  for (let i in words) {
+    const now_data = words[i];
+    const word = now_data["word"];
+    const pronun = now_data["pronun"];
+    const value = now_data["value"];
 
-  key_list = Object.keys(res);
-  for (idx in key_list) {
     const li = document.createElement("li");
 
     key = key_list[idx];
@@ -19,12 +24,11 @@ const showingLists = (words, type) => {
     definitionIndex = res[key].indexOf(":");
     definition = res[key].substring(definitionIndex + 1).trim();
 
-    if (type === "no_pron") {
+    if (type === "yes_pron") {
       li_text = key + " " + `(${pronounciation})` + " : " + definition;
     } else {
-      li_text = key + " : " + definition;
+      li_text = word + " : " + value;
     }
-    console.log(li_text);
     li.innerHTML = li_text;
     ul.appendChild(li);
   }
