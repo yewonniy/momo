@@ -24,7 +24,10 @@ def home(request):
                 split_word = line[i].split(")")
                 key = split_word[0]+")"
                 value = split_word[1]
-                data[key] = value
+                
+                data[key] = key
+                data[pro] = pro
+                data[value] = value
 
         except Word.DoesNotExist:
             system_prompt = """You are the best Korean, English and linguistic expert. If I tell you Korean pronunciation, answer 10 similar English words, their pronunciation, and definition.
@@ -84,9 +87,13 @@ def home(request):
             for line in lines:
                 key_pro, value = line.split(':')
                 key = key_pro.split()[0].strip() # 영어 단어만 추출
+                pro = key_pro.split()[1].strip() # 발음만 추출
                 value = value.strip() # 값 정리
                 output_word = output_word + key_pro + value + "/"
-                data[key_pro] = value
+                
+                data[key] = key
+                data[pro] = pro
+                data[value] = value
 
             # word 객체 생성
             input_word = user_input
