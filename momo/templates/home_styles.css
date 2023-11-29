@@ -26,9 +26,10 @@ body {
 }
 
 #title {
-  font-size: 1.125rem;
+  font-size: 1.3rem;
   font-weight: normal;
   color: #333; /* 제목 색상 지정 */
+  font-weight: bold;
 }
 
 #settings-button {
