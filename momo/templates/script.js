@@ -27,22 +27,33 @@ async function onGoogleSearchLoad() {
     setupIframe(iframe);
 }
 
+
 function setupIframe(iframe) {
-    // Setup iframe properties
-    iframe.style.width = '500px';
-    iframe.style.height = '500px';
-    iframe.style.border = 'none';
-    iframe.style.display = 'flex';
+    // Setup iframe properties with CSS variables
+    iframe.style.flex = '0 auto';
+    iframe.style.position = 'relative';
+    iframe.style.transition = 'opacity 0.3s';
+    iframe.style.width = '23rem';
+
+    // Set the source of the iframe
     iframe.src = chrome.runtime.getURL('home.html');
 
-    // Check for #rhs element
+    window.addEventListener('message', function(event) {
+        // Optional: Check the origin here for security
+        if (event.data.iframeHeight) {
+            iframe.style.height = (event.data.iframeHeight + 50) + 'px'; // Add 10px to the content height
+        }
+    });
+
+    // Append the iframe to the appropriate container
     const rhsContainer = document.querySelector('#rhs');
     if (rhsContainer) {
+        iframe.style.marginBottom = '40px'; // Corrected property name
         rhsContainer.insertBefore(iframe, rhsContainer.firstChild);
     } else {
-        // If #rhs is not present, check for #rcnt and append iframe there
         const rcntContainer = document.querySelector('#rcnt');
         if (rcntContainer) {
+            iframe.style.marginLeft = '76px';
             rcntContainer.appendChild(iframe);
         }
     }

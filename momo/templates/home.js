@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchInput && searchButton) {
       chrome.storage.local.set({ 'searchWordback': '' }, function () {
           console.log('searchWordback cleared');
+
       });
       // Both elements are found, proceed with the actions
       chrome.storage.local.get(['searchWord'], function (result) {
@@ -174,3 +175,27 @@ document.addEventListener('DOMContentLoaded', function () {
   // Start waiting for elements
   waitForElements()
 });
+
+function updateIframeHeight() {
+  // #total-container 요소의 높이를 얻음
+  const totalContainer = document.getElementById('total-container');
+  const height = totalContainer ? totalContainer.clientHeight : 0; // 요소가 존재하지 않으면 높이를 0으로 설정
+
+  console.log("현재 #total-container 높이:", height); // 현재 높이를 콘솔에 출력
+  window.parent.postMessage({ iframeHeight: height }, '*'); // 이제 #total-container의 높이를 기준으로 메시지 전송
+}
+
+// MutationObserver 초기화
+const observer = new MutationObserver(function(mutations) {
+  updateIframeHeight();
+});
+
+// 관찰할 대상 요소와 옵션을 설정
+const config = { attributes: true, childList: true, subtree: true };
+const targetNode = document.body; // body 또는 특정 요소를 대상으로 설정 가능
+
+// 관찰 시작
+observer.observe(targetNode, config);
+
+// 페이지 로드 시에도 한 번 호출
+window.onload = updateIframeHeight;
