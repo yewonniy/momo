@@ -34,7 +34,7 @@ function setupIframe(iframe) {
     iframe.style.position = 'relative';
     iframe.style.transition = 'opacity 0.3s';
     iframe.style.width = '23rem';
-
+    iframe.style.border = 'none'; // 이 부분을 추가
     // Set the source of the iframe
     iframe.src = chrome.runtime.getURL('home.html');
 
