@@ -26,10 +26,18 @@ body {
 }
 
 #title {
-  font-size: 1.3rem;
+  font-family: 'JalnanGothic';
+  font-size: 0.9rem;
   font-weight: normal;
   color: #333; /* 제목 색상 지정 */
-  font-weight: bold;
+  white-space : nowrap;
+}
+
+@font-face {
+  font-family: 'JalnanGothic';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 #settings-button {
@@ -58,25 +66,35 @@ body {
   width: 14rem;
   height: 2.75rem;
 }
-
 #search-input {
+  width: 9rem;
+  padding-left: 30px;
+  font-size: 16px;
+  background-color: transparent;
+  display: flex;
+  border: 0px;
+  justify-content: center;
+}
+#search-input-2 {
   width: 9rem;
   padding: 10px;
   font-size: 16px;
-  border: 0;
   background-color: transparent;
-  display: flex;
   text-align: center;
+  border: 0px;
+  outline: none;
+  font-weight: 700;
 }
 
-#search-button {
+#search-button-2 {
   border: 0;
   background-color: #fff;
   display: flex-end;
   margin-right: 0.5rem;
+  margin-top: 0.5rem;
 }
 
-#search-button img {
+#search-button-2 img {
   width: 20px; /* 이미지 크기 조절 */
   height: auto;
 }
@@ -99,9 +117,13 @@ ul {
   text-align: left;
 }
 
-#results-list {
+.results-list {
   list-style-type: disc;
   display: flex;
   text-align: left;
   margin-right: 1rem;
+}
+
+.results-list li {
+  line-height: 1.7; /* 원하는 행간 크기로 조절하세요 */
 }
